@@ -1,3 +1,0 @@
-2 modules are obligatory to install for the successful accomplishment of the program:
-1)folium
-2)geopy

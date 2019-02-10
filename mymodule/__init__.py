@@ -2,6 +2,7 @@ import folium
 from geopy.geocoders import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
 from folium.features import DivIcon
+import html
 
 m = folium.Map()
 f = open("locations.list", "r")
@@ -40,21 +41,19 @@ for el in data:
             continue
         films.append((name, year, location))
         coordinates = geocode(lst_location[0])
-        print(lst_location)
         if not coordinates:
             if len(lst_location) > 1:
                 coordinates = geocode(lst_location[1])
         if coordinates:
-            print((coordinates.latitude, coordinates.longitude))
+            # print((coordinates.latitude, coordinates.longitude))
             location_layer.add_child(folium.Marker(location=[coordinates.latitude, coordinates.longitude], popup=name,
                                                    icon=folium.Icon(icon="leaf", color=map_color), tooltip=tooltip))
             name_layer.add_child(folium.Marker([coordinates.latitude, coordinates.longitude],
                                                icon=DivIcon(icon_size=(150, 36), icon_anchor=(0, 0),
-                                                            html='<div style="font-size: 24pt">{}</div>'.format(
-                                                                name), )))
+                                                            html='<div style="font-size: 10pt">{}</div>'.format(
+                                                                html.escape(name))), ))
 
 m.add_child(location_layer)
 m.add_child(name_layer)
-
 folium.LayerControl().add_to(m)
 m.save('Map.html')
